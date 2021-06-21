@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace AddressBookWebTests
@@ -12,13 +13,7 @@ namespace AddressBookWebTests
         [Test]
         public void TheGroupRemovalTest()
         {
-            OpenHomePage();
-            Login(new AccountData ("admin", "secret"));
-            OpenGroupPage();
-            SelectGroup(1);
-            RemoveGroup();
-            ReturnToGroupPage();
-            Logout();
+            app.Groups.Remove(1);
         }
     }
 }
