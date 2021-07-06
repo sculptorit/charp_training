@@ -13,6 +13,13 @@ namespace AddressBookWebTests
         [Test]
         public void TheGroupModificationTest()
         {
+            GroupData newData = new GroupData("ModifiedName");
+            newData.Header = "mod";
+            newData.Footer = "cha";
+
+            app.Groups.Modify(1, newData);
         }
+
+
     }
 }

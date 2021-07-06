@@ -13,6 +13,7 @@ namespace AddressBookWebTests
     {
         protected IWebDriver driver;
         protected AppManager manager;
+        protected bool acceptNextAlert = true;
 
         public HelperBase(AppManager manager)
         {

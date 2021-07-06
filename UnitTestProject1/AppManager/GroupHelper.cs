@@ -26,12 +26,26 @@ namespace AddressBookWebTests
             return this;
         }
 
-        public void Remove(int v)
+        public GroupHelper Modify(int v, GroupData newData)
         {
             manager.Navigator.GoToGroupPage();
-            SelectGroup(1);
+
+            SelectGroup(v);
+            InitGroupMod();
+            FeelGroupForms(newData);
+            SubmitGroupMod();
+            ReturnToGroupPage();
+            return this;
+        }
+
+        public GroupHelper Remove(int v)
+        {
+            manager.Navigator.GoToGroupPage();
+
+            SelectGroup(v);
             RemoveGroup();
             ReturnToGroupPage();
+            return this;
         }
 
         //Методы, относящиеся к созданию новой группы
@@ -74,6 +88,19 @@ namespace AddressBookWebTests
         public GroupHelper RemoveGroup()
         {
             driver.FindElement(By.Name("delete")).Click();
+            return this;
+        }
+
+        //Методы, относящиеся к изменению данных групы
+        public GroupHelper InitGroupMod()
+        {
+            driver.FindElement(By.Name("edit")).Click();
+            return this;
+        }
+        public GroupHelper SubmitGroupMod()
+        {
+            driver.FindElement(By.Name("update")).Click();
+
             return this;
         }
     }
