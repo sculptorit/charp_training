@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
@@ -11,6 +12,7 @@ namespace AddressBookWebTests
 {
     public class GroupHelper : HelperBase
     {
+        protected string baseURL;
         public GroupHelper(AppManager manager) : base(manager)
         {
         }
@@ -20,7 +22,7 @@ namespace AddressBookWebTests
             manager.Navigator.GoToGroupPage();
             
             NewGroupCreation();
-            FeelGroupForms(group);
+            FillGroupForms(group);
             SubmitGroupCreation();
             ReturnToGroupPage();
             return this;
@@ -30,19 +32,19 @@ namespace AddressBookWebTests
         {
             manager.Navigator.GoToGroupPage();
 
-            SelectGroup(v);
+            SelectGroup(v, newData);
             InitGroupMod();
-            FeelGroupForms(newData);
+            FillGroupForms(newData);
             SubmitGroupMod();
             ReturnToGroupPage();
             return this;
         }
 
-        public GroupHelper Remove(int v)
+        public GroupHelper Remove(int v, GroupData newData)
         {
             manager.Navigator.GoToGroupPage();
 
-            SelectGroup(v);
+            SelectGroup(v, newData);
             RemoveGroup();
             ReturnToGroupPage();
             return this;
@@ -54,19 +56,14 @@ namespace AddressBookWebTests
             driver.FindElement(By.Name("new")).Click();
             return this;
         }
-        public GroupHelper FeelGroupForms(GroupData group)
+        public GroupHelper FillGroupForms(GroupData group)
         {
-            driver.FindElement(By.Name("group_name")).Click();
-            driver.FindElement(By.Name("group_name")).Clear();
-            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            driver.FindElement(By.Name("group_header")).Click();
-            driver.FindElement(By.Name("group_header")).Clear();
-            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            driver.FindElement(By.Name("group_footer")).Click();
-            driver.FindElement(By.Name("group_footer")).Clear();
-            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+            TypeData(By.Name("group_name"), group.Name);
+            TypeData(By.Name("group_header"), group.Header);
+            TypeData(By.Name("group_footer"), group.Footer);
             return this;
         }
+
         public GroupHelper SubmitGroupCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
@@ -80,8 +77,12 @@ namespace AddressBookWebTests
 
 
         //Методы, относящиеся к удалению группы
-        public GroupHelper SelectGroup(int index)
+        public GroupHelper SelectGroup(int index, GroupData group)
         {
+            if (!IsGroupPresent())
+            {
+                Create(group);
+            }
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
             return this;
         }
@@ -102,6 +103,11 @@ namespace AddressBookWebTests
             driver.FindElement(By.Name("update")).Click();
 
             return this;
+        }
+        public bool IsGroupPresent()
+        {
+            Thread.Sleep(2000);
+            return IsElementPresent(By.Name("selected[]"));
         }
     }
 }

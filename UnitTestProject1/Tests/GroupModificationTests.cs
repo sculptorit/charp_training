@@ -8,14 +8,14 @@ namespace AddressBookWebTests
 
 {
     [TestFixture]
-    public class GroupModificationTests : TestBase
+    public class GroupModificationTests : AuthTestBase
     {
         [Test]
         public void TheGroupModificationTest()
         {
             GroupData newData = new GroupData("ModifiedName");
-            newData.Header = "mod";
-            newData.Footer = "cha";
+            newData.Header = null;
+            newData.Footer = null;
 
             app.Groups.Modify(1, newData);
         }

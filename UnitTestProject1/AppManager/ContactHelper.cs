@@ -14,7 +14,6 @@ namespace AddressBookWebTests
 {
     public class ContactHelper : HelperBase
     {
-        protected string baseURL;
         public ContactHelper(AppManager manager) : base(manager)
         {
         }
@@ -28,15 +27,15 @@ namespace AddressBookWebTests
         }
         public ContactHelper Modify(int v, ContactData newData)
         {
-            GoToEditPage(v);
+            StartEditContactPage(v, newData);
             InputContactData(newData);
             SubmitContactMod();
             return this;
         }
 
-        public ContactHelper Remove(int v)
+        public ContactHelper Remove(int v, ContactData contact)
         {
-            SelectContact(v);
+            SelectContact(v, contact);
             RemoveContact();
             return this;
         }
@@ -51,12 +50,8 @@ namespace AddressBookWebTests
 
             public ContactHelper InputContactData(ContactData contact)
         {
-            driver.FindElement(By.Name("firstname")).Click();
-            driver.FindElement(By.Name("firstname")).Clear();
-            driver.FindElement(By.Name("firstname")).SendKeys(contact.FirstName);
-            driver.FindElement(By.Name("lastname")).Click();
-            driver.FindElement(By.Name("lastname")).Clear();
-            driver.FindElement(By.Name("lastname")).SendKeys(contact.LastName);
+            TypeData(By.Name("firstname"), contact.FirstName);
+            TypeData(By.Name("lastname"), contact.LastName);
             return this;
         }
         public ContactHelper SubmitContactData()
@@ -66,9 +61,13 @@ namespace AddressBookWebTests
         }
 
         //Методы, относящиеся к удалению контактов
-        public ContactHelper SelectContact(int index)
+        public ContactHelper SelectContact(int index, ContactData contact)
         {
             Thread.Sleep(2000);
+            if (!IsContactPresent())
+            {
+                Create(contact);
+            }
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
             return this;
         }
@@ -102,11 +101,21 @@ namespace AddressBookWebTests
         }
 
         //Методы, относящиеся к изменению контактов
-        public ContactHelper GoToEditPage(int index)
+
+        public bool IsContactPresent()
         {
             Thread.Sleep(2000);
-            driver.FindElement(By.XPath("//tr[" + index + "]/td[8]/a/img")).Click();
-            return this;
+            return IsElementPresent(By.Name("selected[]"));
+        }
+
+        public void StartEditContactPage(int index, ContactData contact)
+        {
+            if (!IsContactPresent())
+            {
+                Create(contact);
+            }
+            Thread.Sleep(2000);
+            driver.Navigate().GoToUrl("http://localhost/addressbook/edit.php?id=" + index + "");
         }
         public ContactHelper SubmitContactMod()
         {

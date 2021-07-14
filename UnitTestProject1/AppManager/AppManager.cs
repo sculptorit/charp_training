@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
+using NUnit.Framework;
 
 namespace AddressBookWebTests
 {
@@ -21,7 +22,9 @@ namespace AddressBookWebTests
         protected GroupHelper groupHelper;
         protected ContactHelper contactHelper;
 
-        public AppManager()
+        private static ThreadLocal<AppManager> app = new ThreadLocal<AppManager>();
+
+        private AppManager()
         {
             driver = new FirefoxDriver();
             baseURL = "http://localhost/addressbook";
@@ -29,6 +32,29 @@ namespace AddressBookWebTests
             navigator = new NavigationHelper(this, baseURL);
             groupHelper = new GroupHelper(this);
             contactHelper = new ContactHelper(this);
+        }
+
+       ~AppManager()
+        {
+            try
+            {
+                driver.Quit();
+            }
+            catch (Exception)
+            {
+                // Ignore errors if unable to close the browser
+            }
+        }
+
+        public static AppManager GetInstance()
+        {
+            if (! app.IsValueCreated)
+            {
+                AppManager newInstance = new AppManager();
+                newInstance.Navigator.OpenHomePage();
+                app.Value = newInstance;
+            }
+            return app.Value;
         }
         public IWebDriver Driver 
         { 
@@ -43,19 +69,6 @@ namespace AddressBookWebTests
         {
             driver = new FirefoxDriver();
             baseURL = "http://localhost/addressbook";
-        }
-
-        [TearDown]
-        public void Stop ()
-        {
-            try
-            {
-                driver.Quit();
-            }
-            catch (Exception)
-            {
-                // Ignore errors if unable to close the browser
-            }
         }
 
         public LoginHelper Auth

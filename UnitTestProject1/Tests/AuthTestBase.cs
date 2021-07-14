@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace AddressBookWebTests
 {
-    public class TestBase
+    public class AuthTestBase : TestBase
     {
-        protected AppManager app;
-
         [SetUp]
-        public void SetupAppManager()
+        public void SetupLogin()
         {
-            app = AppManager.GetInstance();
-        }   
+            app.Auth.Login(new AccountData("admin", "secret"));
+        }
     }
 }
