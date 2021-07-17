@@ -20,7 +20,7 @@ namespace AddressBookWebTests
         public GroupHelper Create(GroupData group)
         {
             manager.Navigator.GoToGroupPage();
-            
+
             NewGroupCreation();
             FillGroupForms(group);
             SubmitGroupCreation();
@@ -30,8 +30,6 @@ namespace AddressBookWebTests
 
         public GroupHelper Modify(int v, GroupData newData)
         {
-            manager.Navigator.GoToGroupPage();
-
             SelectGroup(v, newData);
             InitGroupMod();
             FillGroupForms(newData);
@@ -42,8 +40,6 @@ namespace AddressBookWebTests
 
         public GroupHelper Remove(int v, GroupData newData)
         {
-            manager.Navigator.GoToGroupPage();
-
             SelectGroup(v, newData);
             RemoveGroup();
             ReturnToGroupPage();
@@ -79,10 +75,6 @@ namespace AddressBookWebTests
         //Методы, относящиеся к удалению группы
         public GroupHelper SelectGroup(int index, GroupData group)
         {
-            if (!IsGroupPresent())
-            {
-                Create(group);
-            }
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
             return this;
         }
@@ -104,6 +96,17 @@ namespace AddressBookWebTests
 
             return this;
         }
+
+        public GroupHelper GroupPresCheck(GroupData group)
+        {
+            manager.Navigator.GoToGroupPage();
+            if (!IsGroupPresent())
+            {
+                Create(group);
+            }
+            return this;
+        }
+
         public bool IsGroupPresent()
         {
             Thread.Sleep(2000);

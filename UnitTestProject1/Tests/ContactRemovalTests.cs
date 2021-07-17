@@ -15,6 +15,8 @@ namespace AddressBookWebTests
         {
             ContactData contact = new ContactData("TestFirstName","TestLastName");
 
+            app.Contacts.ContactPresCheck(contact);
+
             app.Contacts.Remove(1, contact);
         }
     }

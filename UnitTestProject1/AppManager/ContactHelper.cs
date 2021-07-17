@@ -108,12 +108,16 @@ namespace AddressBookWebTests
             return IsElementPresent(By.Name("selected[]"));
         }
 
-        public void StartEditContactPage(int index, ContactData contact)
+        public ContactHelper ContactPresCheck(ContactData contact)
         {
             if (!IsContactPresent())
             {
                 Create(contact);
             }
+            return this;
+        }
+        public void StartEditContactPage(int index, ContactData contact)
+        {
             Thread.Sleep(2000);
             driver.Navigate().GoToUrl("http://localhost/addressbook/edit.php?id=" + index + "");
         }
