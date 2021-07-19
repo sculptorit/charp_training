@@ -25,14 +25,25 @@ namespace AddressBookWebTests
             app.Groups.GroupPresCheck(group);
 
             List<GroupData> oldGroups = app.Groups.GetGroupList();
+            GroupData oldData = oldGroups[0];
 
             app.Groups.Modify(0, newData);
+
+            Assert.AreEqual(oldGroups.Count, app.Groups.GetGroupCount());
 
             List<GroupData> newGroups = app.Groups.GetGroupList();
             oldGroups[0].Name = newData.Name;
             oldGroups.Sort();
             newGroups.Sort();
             Assert.AreEqual(oldGroups.Count, newGroups.Count);
+
+            foreach (GroupData groupelement in newGroups)
+            {
+                if (groupelement.Id == oldData.Id)
+                {
+                    Assert.AreEqual(newData.Name, groupelement.Name);
+                }
+            }
         }
 
 

@@ -22,11 +22,18 @@ namespace AddressBookWebTests
 
             app.Contacts.Remove(0, contact);
 
+            Assert.AreEqual(oldContacts.Count - 1, app.Contacts.GetContactCount());
+
             List<ContactData> newContacts = app.Contacts.GetContactList();
+
+            ContactData ToBeRemoved = oldContacts[0];
             oldContacts.RemoveAt(0);
-            oldContacts.Sort();
-            newContacts.Sort();
             Assert.AreEqual(oldContacts, newContacts);
+
+            foreach (ContactData contactelement in newContacts)
+            {
+                Assert.AreNotEqual(contactelement.Id, ToBeRemoved.Id);
+            }
         }
     }
 }

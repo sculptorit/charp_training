@@ -19,6 +19,8 @@ namespace AddressBookWebTests
 
             app.Contacts.Create(contact);
 
+            Assert.AreEqual(oldContacts.Count + 1, app.Contacts.GetContactCount());
+
             app.Navigator.GoToHomePage();
 
             List<ContactData> newContacts = app.Contacts.GetContactList();
@@ -36,6 +38,9 @@ namespace AddressBookWebTests
             List<ContactData> oldContacts = app.Contacts.GetContactList();
 
             app.Contacts.Create(contact);
+
+            Assert.AreEqual(oldContacts.Count + 1, app.Contacts.GetContactCount());
+
             app.Navigator.GoToHomePage();
 
             List<ContactData> newContacts = app.Contacts.GetContactList();

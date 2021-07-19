@@ -24,23 +24,36 @@ namespace AddressBookWebTests
             InitContactCreation();
             InputContactData(contact);
             SubmitContactData();
+            manager.Navigator.GoToHomePage();
             return this;
         }
+
+        private List<ContactData> contactCache = null;
+
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-
-            Thread.Sleep(2000);
-
-            ICollection<IWebElement> elements = driver.FindElements(By.Name("entry"));
-            foreach (IWebElement element in elements)
+            if(contactCache == null)
             {
-                IList<IWebElement> cells = element.FindElements(By.TagName("td"));
-                contacts.Add(new ContactData(cells[2].Text, cells[1].Text));
+                contactCache = new List<ContactData>();
+                manager.Navigator.GoToHomePage();
+                Thread.Sleep(2000);
+                ICollection<IWebElement> elements = driver.FindElements(By.Name("entry"));
+                foreach (IWebElement element in elements)
+                {
+                    IList<IWebElement> cells = element.FindElements(By.TagName("td"));
+                    contactCache.Add(new ContactData(cells[2].Text, cells[1].Text){
+                        Id = element.FindElement(By.TagName("input")).GetAttribute("value")
+                });
+                }
             }
 
-            return contacts;
+            return new List<ContactData>(contactCache);
         }
+        public int GetContactCount()
+        {
+            return driver.FindElements(By.Name("entry")).Count;
+        }
+
         public ContactHelper Modify(int v, ContactData newData)
         {
             manager.Navigator.GoToHomePage();
@@ -56,6 +69,7 @@ namespace AddressBookWebTests
             manager.Navigator.GoToHomePage();
             SelectContact(v, contact);
             RemoveContact();
+            manager.Navigator.GoToHomePage();
             return this;
         }
 
@@ -76,6 +90,7 @@ namespace AddressBookWebTests
         public ContactHelper SubmitContactData()
         {
             driver.FindElement(By.XPath("(//input[@name='submit'])[2]")).Click();
+            contactCache = null;
             return this;
         }
 
@@ -95,6 +110,8 @@ namespace AddressBookWebTests
             acceptNextAlert = true;
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(), "^Delete 1 addresses[\\s\\S]$"));
+            Thread.Sleep(2000);
+            contactCache = null;
             return this;
         }
          public string CloseAlertAndGetItsText()
@@ -143,6 +160,7 @@ namespace AddressBookWebTests
         public ContactHelper SubmitContactMod()
         {
             driver.FindElement(By.Name("update")).Click();
+            contactCache = null;
             return this;
         }
     }

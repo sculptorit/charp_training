@@ -22,11 +22,18 @@ namespace AddressBookWebTests
 
             app.Groups.Remove(0, group);
 
+            Assert.AreEqual(oldGroups.Count - 1, app.Groups.GetGroupCount());
+
             List<GroupData> newGroups = app.Groups.GetGroupList();
 
+            GroupData ToBeRemoved = oldGroups[0];
             oldGroups.RemoveAt(0);
-
             Assert.AreEqual(oldGroups, newGroups);
+
+            foreach(GroupData groupelement in newGroups)
+            {
+                Assert.AreNotEqual(groupelement.Id, ToBeRemoved.Id);
+            }
         }
     }
 }
