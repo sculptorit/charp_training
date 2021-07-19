@@ -29,6 +29,7 @@ namespace AddressBookWebTests
         }
         public void GoToHomePage()
         {
+            Thread.Sleep(2000);
             driver.Navigate().GoToUrl(baseURL);
         }
         public void GoToGroupPage()
