@@ -24,8 +24,19 @@ namespace AddressBookWebTests
             NewGroupCreation();
             FillGroupForms(group);
             SubmitGroupCreation();
-            ReturnToGroupPage();
             return this;
+        }
+
+        public List<GroupData> GetGroupList()
+        {
+            List<GroupData> groups = new List<GroupData>();
+            manager.Navigator.GoToGroupPage();
+            ICollection<IWebElement> groupelements = driver.FindElements(By.CssSelector("span.group"));
+            foreach (IWebElement element in groupelements)
+            {
+                groups.Add(new GroupData(element.Text));
+            }
+            return groups;
         }
 
         public GroupHelper Modify(int v, GroupData newData)
@@ -34,7 +45,6 @@ namespace AddressBookWebTests
             InitGroupMod();
             FillGroupForms(newData);
             SubmitGroupMod();
-            ReturnToGroupPage();
             return this;
         }
 
@@ -42,7 +52,7 @@ namespace AddressBookWebTests
         {
             SelectGroup(v, newData);
             RemoveGroup();
-            ReturnToGroupPage();
+            //ReturnToGroupPage();
             return this;
         }
 
@@ -75,7 +85,7 @@ namespace AddressBookWebTests
         //Методы, относящиеся к удалению группы
         public GroupHelper SelectGroup(int index, GroupData group)
         {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]")).Click();
             return this;
         }
         public GroupHelper RemoveGroup()

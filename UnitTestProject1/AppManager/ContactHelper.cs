@@ -20,21 +20,40 @@ namespace AddressBookWebTests
 
         public ContactHelper Create(ContactData contact)
         {
+            manager.Navigator.GoToHomePage();
             InitContactCreation();
             InputContactData(contact);
             SubmitContactData();
             return this;
         }
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+
+            Thread.Sleep(2000);
+
+            ICollection<IWebElement> elements = driver.FindElements(By.Name("entry"));
+            foreach (IWebElement element in elements)
+            {
+                IList<IWebElement> cells = element.FindElements(By.TagName("td"));
+                contacts.Add(new ContactData(cells[2].Text, cells[1].Text));
+            }
+
+            return contacts;
+        }
         public ContactHelper Modify(int v, ContactData newData)
         {
+            manager.Navigator.GoToHomePage();
             StartEditContactPage(v, newData);
             InputContactData(newData);
             SubmitContactMod();
+            manager.Navigator.GoToHomePage();
             return this;
         }
 
         public ContactHelper Remove(int v, ContactData contact)
         {
+            manager.Navigator.GoToHomePage();
             SelectContact(v, contact);
             RemoveContact();
             return this;
@@ -68,7 +87,7 @@ namespace AddressBookWebTests
             {
                 Create(contact);
             }
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]")).Click();
             return this;
         }
         public ContactHelper RemoveContact()
@@ -119,11 +138,11 @@ namespace AddressBookWebTests
         public void StartEditContactPage(int index, ContactData contact)
         {
             Thread.Sleep(2000);
-            driver.Navigate().GoToUrl("http://localhost/addressbook/edit.php?id=" + index + "");
+            driver.FindElement(By.XPath("//img[@alt='Edit'][" + (index+1) + "]")).Click();
         }
         public ContactHelper SubmitContactMod()
         {
-            driver.FindElement(By.XPath("//div[@id='content']/form/input[22]")).Click();
+            driver.FindElement(By.Name("update")).Click();
             return this;
         }
     }

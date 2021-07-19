@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace AddressBookWebTests
 {
@@ -17,7 +18,15 @@ namespace AddressBookWebTests
 
             app.Groups.GroupPresCheck(group);
 
-            app.Groups.Remove(1, group);
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+
+            app.Groups.Remove(0, group);
+
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+
+            oldGroups.RemoveAt(0);
+
+            Assert.AreEqual(oldGroups, newGroups);
         }
     }
 }
