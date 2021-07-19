@@ -49,6 +49,21 @@ namespace AddressBookWebTests
 
             return new List<ContactData>(contactCache);
         }
+
+        public string GetContactInformationFromDetailsPage(int index)
+        {
+            manager.Navigator.GoToHomePage();
+            GoToContactDetailsPage(index);
+            string data = driver.FindElement(By.Id("content")).Text;
+            return data;
+        }
+
+        public ContactHelper GoToContactDetailsPage(int index)
+        {
+            driver.FindElements(By.Name("entry"))[index].FindElements(By.TagName("td"))[6].FindElement(By.TagName("a")).Click();
+            return this;
+        }
+
         public int GetContactCount()
         {
             return driver.FindElements(By.Name("entry")).Count;
@@ -220,6 +235,8 @@ namespace AddressBookWebTests
             string text = driver.FindElement(By.Id("search_count")).Text;
             return Int32.Parse(text);
         }
+
+
     }
 }
 

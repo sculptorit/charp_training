@@ -11,6 +11,7 @@ namespace AddressBookWebTests
     {
         private string allPhones;
         private string allEmails;
+        private string allPageData;
         public ContactData(string firstname, string lastname)
         {
             FirstName = firstname;
@@ -111,5 +112,53 @@ namespace AddressBookWebTests
             }
         }
 
+        public string AllPageData
+        {
+            get
+            {
+                if (allPageData != null)
+                {
+                    return allPageData;
+                }
+                else
+                {
+                    string pageDataInString = "";
+
+                    if (FirstName != null || LastName != null)
+                    {
+                        pageDataInString += FirstName != null ? FirstName + " " : "";
+                        pageDataInString += LastName != null ? LastName + "\r\n" : "";
+                        pageDataInString += "\r\n";
+                    }
+
+                    if (Address != null)
+                    {
+                        pageDataInString += Address != null ? Address + "\r\n" : "";
+                        pageDataInString += "\r\n";
+                    }
+
+                    if (HomePhone != null || MobilePhone != null || WorkPhone != null)
+                    {
+                        pageDataInString += HomePhone != null ? "H: " + HomePhone + "\r\n" : "";
+                        pageDataInString += MobilePhone != null ? "M: " + MobilePhone + "\r\n" : "";
+                        pageDataInString += WorkPhone != null ? "W: " + WorkPhone + "\r\n" : "";
+                        pageDataInString += "\r\n";
+                    }
+
+                    if (Email != null || Email2 != null || Email3 != null)
+                    {
+                        pageDataInString += Email != null ? Email + "\r\n" : "";
+                        pageDataInString += Email2 != null ? Email2 + "\r\n" : "";
+                        pageDataInString += Email3 != null ? Email3 + "\r\n" : "";
+                    }
+
+                    return pageDataInString;
+                }
+            }
+            set
+            {
+                allPageData = value;
+            }
+        }
     }   
 }
