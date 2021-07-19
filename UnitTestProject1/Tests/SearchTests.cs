@@ -13,6 +13,11 @@ namespace AddressBookWebTests
         [Test]
         public void TestSearch()
         {
+            int contactsCount = app.Contacts.GetContactList().Count;
+
+            int searchContactsResult = app.Contacts.GetNumberOfSearchResults();
+
+            Assert.AreEqual(searchContactsResult, contactsCount);
             System.Console.Out.Write(app.Contacts.GetNumberOfSearchResults());
         }
 
