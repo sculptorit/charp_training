@@ -78,7 +78,7 @@ namespace AddressBookWebTests
             return groups;
         }
 
-        [Test, TestCaseSource("GroupDataFromJsonFile")]
+        [Test, TestCaseSource("GroupDataFromExcelFile")]
         public void GroupsCreationTest(GroupData group)
         {
             List<GroupData> oldGroups = app.Groups.GetGroupList();
