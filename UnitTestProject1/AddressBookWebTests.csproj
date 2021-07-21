@@ -123,8 +123,10 @@
     <Compile Include="Model\AddressBookDB.cs" />
     <Compile Include="Model\ContactData.cs" />
     <Compile Include="AppManager\ContactHelper.cs" />
+    <Compile Include="Model\GroupContactRelation.cs" />
     <Compile Include="Model\GroupData.cs" />
     <Compile Include="AppManager\GroupHelper.cs" />
+    <Compile Include="Tests\AddingContactToGroupTests.cs" />
     <Compile Include="Tests\AuthTestBase.cs" />
     <Compile Include="Tests\ContactInformationTests.cs" />
     <Compile Include="Tests\ContactModificationTests.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="AppManager\NavigationHelper.cs" />
     <Compile Include="Tests\GroupTestBase.cs" />
     <Compile Include="Tests\LoginTests.cs" />
+    <Compile Include="Tests\RemovalContactFromGroupTests.cs" />
     <Compile Include="Tests\SearchTests.cs" />
     <Compile Include="Tests\TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
