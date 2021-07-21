@@ -13,7 +13,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 namespace AddressBookWebTests
 {
     [TestFixture]
-    public class ContactAddTest : AuthTestBase
+    public class ContactAddTest : ContactTestBase
     {
         public static IEnumerable<ContactData> RandomContactDataProvide()
         {
@@ -87,7 +87,7 @@ namespace AddressBookWebTests
         [Test, TestCaseSource("ContactDataFromJsonFile")]
         public void ContactCreationTest(ContactData contact)
         {
-            List<ContactData> oldContacts = app.Contacts.GetContactList();
+            List<ContactData> oldContacts = ContactData.GetAll();
 
             app.Contacts.Create(contact);
 
@@ -95,7 +95,7 @@ namespace AddressBookWebTests
 
             app.Navigator.GoToHomePage();
 
-            List<ContactData> newContacts = app.Contacts.GetContactList();
+            List<ContactData> newContacts = ContactData.GetAll();
             oldContacts.Add(contact);
             oldContacts.Sort();
             newContacts.Sort();

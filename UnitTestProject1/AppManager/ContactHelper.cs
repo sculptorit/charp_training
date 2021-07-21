@@ -79,10 +79,29 @@ namespace AddressBookWebTests
             return this;
         }
 
+        public ContactHelper Modify(ContactData oldData, ContactData newData)
+        {
+            manager.Navigator.GoToHomePage();
+            StartEditContactPage(oldData.Id);
+            InputContactData(newData);
+            SubmitContactMod();
+            manager.Navigator.GoToHomePage();
+            return this;
+        }
+
         public ContactHelper Remove(int v, ContactData contact)
         {
             manager.Navigator.GoToHomePage();
             SelectContact(v, contact);
+            RemoveContact();
+            manager.Navigator.GoToHomePage();
+            return this;
+        }
+
+        public ContactHelper Remove(ContactData contact)
+        {
+            manager.Navigator.GoToHomePage();
+            SelectContact(contact.Id);
             RemoveContact();
             manager.Navigator.GoToHomePage();
             return this;
@@ -118,6 +137,12 @@ namespace AddressBookWebTests
                 Create(contact);
             }
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]")).Click();
+            return this;
+        }
+
+        public ContactHelper SelectContact(string id)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @id='" + id + "'])")).Click(); ;
             return this;
         }
         public ContactHelper RemoveContact()
@@ -171,6 +196,13 @@ namespace AddressBookWebTests
         {
             Thread.Sleep(2000);
             driver.FindElement(By.XPath("//img[@alt='Edit'][" + (index+1) + "]")).Click();
+        }
+
+        public ContactHelper StartEditContactPage(string id)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @id='" + id + "'])"))
+                .FindElement(By.XPath("..//..//img[@title='Edit']")).Click();
+            return this;
         }
         public ContactHelper SubmitContactMod()
         {

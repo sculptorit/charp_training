@@ -57,6 +57,8 @@ namespace AddressBookWebTests
 
         public GroupHelper Modify(int v, GroupData newData)
         {
+            manager.Navigator.GoToGroupPage();
+
             SelectGroup(v, newData);
             InitGroupMod();
             FillGroupForms(newData);
@@ -65,9 +67,34 @@ namespace AddressBookWebTests
             return this;
         }
 
+        public GroupHelper Modify(GroupData oldData, GroupData newData)
+        {
+            manager.Navigator.GoToGroupPage();
+
+            SelectGroup(oldData.Id);
+            InitGroupMod();
+            FillGroupForms(newData);
+            SubmitGroupMod();
+            ReturnToGroupPage();
+            return this;
+        }
+
+
+
         public GroupHelper Remove(int v, GroupData newData)
         {
+            manager.Navigator.GoToGroupPage();
+
             SelectGroup(v, newData);
+            RemoveGroup();
+            ReturnToGroupPage();
+            return this;
+        }
+
+        public GroupHelper Remove(GroupData group)
+        {
+            manager.Navigator.GoToGroupPage();
+            SelectGroup(group.Id);
             RemoveGroup();
             ReturnToGroupPage();
             return this;
@@ -99,11 +126,15 @@ namespace AddressBookWebTests
             return this;
         }
 
-
-        //Методы, относящиеся к удалению группы
         public GroupHelper SelectGroup(int index, GroupData group)
         {
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index+1) + "]")).Click();
+            return this;
+        }
+
+        public GroupHelper SelectGroup(String id)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @value='"+id+"'])")).Click();
             return this;
         }
         public GroupHelper RemoveGroup()
@@ -113,7 +144,7 @@ namespace AddressBookWebTests
             return this;
         }
 
-        //Методы, относящиеся к изменению данных групы
+
         public GroupHelper InitGroupMod()
         {
             driver.FindElement(By.Name("edit")).Click();

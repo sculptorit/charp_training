@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace AddressBookWebTests
 {
     [TestFixture]
-    public class GroupRemovalTest : AuthTestBase
+    public class GroupRemovalTest : GroupTestBase
     {
         [Test]
         public void TheGroupRemovalTest()
@@ -18,21 +18,21 @@ namespace AddressBookWebTests
 
             app.Groups.GroupPresCheck(group);
 
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            List<GroupData> oldGroups = GroupData.GetAll();
+            GroupData toBeRemoved = oldGroups[0];
 
-            app.Groups.Remove(0, group);
+            app.Groups.Remove(toBeRemoved);
 
             Assert.AreEqual(oldGroups.Count - 1, app.Groups.GetGroupCount());
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
+            List<GroupData> newGroups = GroupData.GetAll();
 
-            GroupData ToBeRemoved = oldGroups[0];
             oldGroups.RemoveAt(0);
             Assert.AreEqual(oldGroups, newGroups);
 
             foreach(GroupData groupelement in newGroups)
             {
-                Assert.AreNotEqual(groupelement.Id, ToBeRemoved.Id);
+                Assert.AreNotEqual(groupelement.Id, toBeRemoved.Id);
             }
         }
     }

@@ -9,7 +9,7 @@ namespace AddressBookWebTests
 
 {
     [TestFixture]
-    public class GroupModificationTests : AuthTestBase
+    public class GroupModificationTests : ContactTestBase
     {
         [Test]
         public void TheGroupModificationTest()
@@ -18,34 +18,33 @@ namespace AddressBookWebTests
             group.Header = "aaa";
             group.Footer = "123";
 
-            GroupData newData = new GroupData("ModifiedName");
-            newData.Header = null;
-            newData.Footer = null;
+            GroupData newData = new GroupData("NewGroupName");
+            newData.Header = "null";
+            newData.Footer = "null";
 
             app.Groups.GroupPresCheck(group);
 
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            List<GroupData> oldGroups = GroupData.GetAll();
             GroupData oldData = oldGroups[0];
 
-            app.Groups.Modify(0, newData);
+            app.Groups.Modify(oldData, newData);
 
             Assert.AreEqual(oldGroups.Count, app.Groups.GetGroupCount());
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
+            List<GroupData> newGroups = GroupData.GetAll();
             oldGroups[0].Name = newData.Name;
             oldGroups.Sort();
             newGroups.Sort();
-            Assert.AreEqual(oldGroups.Count, newGroups.Count);
+
+            Assert.AreEqual(oldGroups, newGroups);
 
             foreach (GroupData groupelement in newGroups)
             {
-                if (groupelement.Id == oldData.Id)
+                if  (groupelement.Id == oldData.Id)
                 {
                     Assert.AreEqual(newData.Name, groupelement.Name);
                 }
             }
         }
-
-
     }
 }
