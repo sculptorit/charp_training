@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Reflection;
 using NUnit.Framework;
 
 namespace mantis_tests
@@ -9,14 +10,16 @@ namespace mantis_tests
     [TestFixture]
     public class AccountCreationTests : TestBase
     {
-       /* [TestFixtureSetUp]
+       [TestFixtureSetUp]
 
         public void setUpConfig()
         {
             app.Ftp.BackupFile("/config_inc.php");
-            using (Stream localFile = File.Open("/config_inc.php", FileMode.Open))
+            string currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string myConfigPath = Path.Combine(currentDirectory, "config_inc.php");
+            using (Stream localFile = File.OpenRead(myConfigPath))
             {
-                app.Ftp.Upload(" / config_inc.php", null);
+                app.Ftp.Upload("/config_inc.php", localFile);
             }
         }
 
@@ -25,10 +28,18 @@ namespace mantis_tests
         {
             AccountData account = new AccountData()
             {
-                Username = "testuser",
+                Username = "testuserrand6",
                 Password = "password",
-                Email = "testuser@localhost.localdomain"
+                Email = "testuserrand6@localhost.localdomain"
             };
+
+            List<AccountData> accounts = app.Admin.GetAllAccounts();
+            AccountData existingAccount = accounts.Find(x => x.Username == account.Username);
+
+            if (existingAccount != null)
+            {
+                app.Admin.DeleteAccount(existingAccount);
+            }
 
             app.Registration.Register(account);   
         }
@@ -38,6 +49,6 @@ namespace mantis_tests
         public void restoreConfig()
         {
             app.Ftp.RestoreBackupFile("/config_defaults_inc.php");
-        }*/
+        }
     }
 }

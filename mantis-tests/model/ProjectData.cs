@@ -9,6 +9,7 @@ namespace mantis_tests
 {
     public class ProjectData : IComparable<ProjectData>, IEquatable<ProjectData>
     {
+        public string Id { get; set; }
         public string ProjectName { get; set; }
         public string ProjectDescribe { get; set; }
 
