@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
@@ -15,15 +16,14 @@ namespace mantis_tests
 {
     public class AppManager
     {
-        public RegistrationHelper Registration { get; set; }
+        /*public RegistrationHelper Registration { get; set; }
         public FtpHelper Ftp { get; set; }
+        public JamesHelper James { get; set; }
+        public AdminHelper Admin { get; set; }
+        public MailHelper Mail { get; set; } */
         public LoginHelper Auth { get; set; }
         public NavigationHelper Navigator { get; set; }
-        public JamesHelper James { get; set; }
-        public MailHelper Mail { get; set; }
         public ProjectHelper Project { get; set; }
-
-        public AdminHelper Admin { get; set; }
         public APIHelper API { get;  set; }
 
         protected IWebDriver driver;
@@ -34,22 +34,25 @@ namespace mantis_tests
 
         private AppManager()
         {
-            driver = new FirefoxDriver();
+            driver = new ChromeDriver();
             baseURL = "http://localhost/mantisbt-2.25.2";
-            Registration = new RegistrationHelper(this);
-            Ftp = new FtpHelper(this);
-            James = new JamesHelper(this);
-            Mail = new MailHelper(this);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
             verificationErrors = new StringBuilder();
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
             Auth = new LoginHelper(this);
             Navigator = new NavigationHelper(this);
             Project = new ProjectHelper(this);
-            Admin = new AdminHelper(this, baseURL);
             API = new APIHelper(this);
+            /*driver = new FirefoxDriver();
+            Admin = new AdminHelper(this, baseURL);
+            Registration = new RegistrationHelper(this);
+            Ftp = new FtpHelper(this);
+            James = new JamesHelper(this);
+            Mail = new MailHelper(this);*/
+
+
         }
 
-       ~AppManager()
+        ~AppManager()
         {
             try
             {
@@ -77,13 +80,6 @@ namespace mantis_tests
             {
                 return driver;
             }
-        }
-
-        [SetUp]
-        public void Start()
-        {
-            driver = new FirefoxDriver();
-            baseURL = "http://localhost/addressbook";
         }
     }
 }

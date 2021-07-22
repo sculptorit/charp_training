@@ -81,6 +81,7 @@ namespace mantis_tests
             driver.FindElement(By.XPath("//input[@value='Удалить проект']")).Click();
         }
 
+        //Метод дублирует ConfirmProjectDeletion(), создан, чтобы не было путаницы при вызовах
         private void PushProjectDelete()
         {
             driver.FindElement(By.XPath("//input[@value='Удалить проект']")).Click();

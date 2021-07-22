@@ -38,25 +38,24 @@ namespace mantis_tests
 
         public bool IsLoggedIn()
         {
-            return IsElementPresent(By.CssSelector("span.user-info"));
+            return IsElementPresent(By.CssSelector("logged-in-user"));
         }
 
         public void Logout()
         {
             if (IsLoggedIn())
             {
-                driver.FindElement(By.CssSelector("span.user-info")).Click();
+                driver.FindElement(By.Id("logout-link")).Click();
                 WebDriverWait waiter = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
                 IWebElement webelement = waiter.Until(ExpectedConditions.
-                    ElementIsVisible(By.CssSelector("a[href = '/mantisbt/logout_page.php']")));
-                driver.FindElement(By.CssSelector("a[href = '/mantisbt/logout_page.php']")).Click();
+                    ElementIsVisible(By.CssSelector("input[value = 'Войти']")));
             }
         }
         public bool IsLoggedIn(AccountData account)
         {
             return IsLoggedIn()
-                && driver.FindElement(By.CssSelector("span.user-info"))
-                .Text == "(" + account.Username + ")";
+                && driver.FindElement(By.CssSelector("logged-in-user"))
+                .Text == account.Username;
         }
     }
 }
