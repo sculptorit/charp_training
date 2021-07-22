@@ -47,17 +47,17 @@ namespace AddressBookWebTests
 
         public int CompareTo(ContactData other)
         {
-            if ((FirstName.CompareTo(other.FirstName) == 0) && (LastName.CompareTo(other.LastName) == 0))
-            {
-                return 0;
-            }
-
             if (Object.ReferenceEquals(other, null))
             {
                 return 1;
             }
+            int check = (LastName.CompareTo(other.LastName));
+            if (check == 0)
+            {
+                return (FirstName.CompareTo(other.FirstName));
+            }
 
-            return 1;
+            return check;
         }
 
         [Column(Name = "firstname")]
